@@ -89,30 +89,32 @@ export default function LoginForm() {
             )}
           />
           <div className="flex flex-row items-center gap-3 flex-wrap">
-            {["Credentials", "GitHub", "Google"].map((item, index) => (
-              <FormField
-                key={index}
-                control={form.control}
-                name="socialMethod"
-                render={({ field }) => {
-                  return (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value === item}
-                          onCheckedChange={(checked) => {
-                            return checked
-                              ? field.onChange(item)
-                              : field.onChange("");
-                          }}
-                        />
-                      </FormControl>
-                      <FormLabel className="font-normal">{item}</FormLabel>
-                    </FormItem>
-                  );
-                }}
-              />
-            ))}
+            {["Credentials", "GitHub", "Google", "LinkedIn"].map(
+              (item, index) => (
+                <FormField
+                  key={index}
+                  control={form.control}
+                  name="socialMethod"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value === item}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange(item)
+                                : field.onChange("");
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel className="font-normal">{item}</FormLabel>
+                      </FormItem>
+                    );
+                  }}
+                />
+              )
+            )}
           </div>
           <Button type="submit">Submit</Button>
         </form>
