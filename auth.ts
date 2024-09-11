@@ -21,7 +21,11 @@ const customAdapter: Adapter = (p: PrismaClient) => {
     ...PrismaAdapter(p),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createUser: async (data: any) => {
-      console.log(data);
+      await prisma.testLog.create({
+        data: {
+          log: JSON.stringify(data),
+        },
+      });
       return p.user.create({ data });
     },
   };

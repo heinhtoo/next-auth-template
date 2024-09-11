@@ -82,3 +82,8 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
+
+model TestLog {
+  id  String @id @default(cuid())
+  log String
+}
