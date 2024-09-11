@@ -7,6 +7,11 @@ import GitHubProvider from "next-auth/providers/github";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import { PrismaClient } from "@prisma/client";
 
+export const BASE_PATH =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000/"
+    : "https://next-auth-template-lovat.vercel.app/";
+
 type Adapter = typeof PrismaAdapter;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
