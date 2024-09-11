@@ -16,6 +16,7 @@ type Adapter = typeof PrismaAdapter;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const customAdapter: Adapter = (p: PrismaClient) => {
   return {
     ...PrismaAdapter(p),
@@ -32,7 +33,7 @@ const customAdapter: Adapter = (p: PrismaClient) => {
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: customAdapter(prisma),
+  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       authorization: {
