@@ -5,9 +5,25 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import LinkedInProvider from "next-auth/providers/linkedin";
+import { PrismaClient } from "@prisma/client";
+
+type Adapter = typeof PrismaAdapter;
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const customAdapter: Adapter = (p: PrismaClient) => {
+  return {
+    ...PrismaAdapter(p),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    createUser: async (data: any) => {
+      console.log(data);
+      return p.user.create({ data });
+    },
+  };
+};
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: customAdapter(prisma),
   providers: [
     GoogleProvider({
       authorization: {
