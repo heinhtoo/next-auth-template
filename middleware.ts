@@ -7,7 +7,11 @@ export const config = {
 
 export default auth((req) => {
   const reqUrl = new URL(req.url);
-  if (!req.auth && reqUrl?.pathname !== "/") {
+  if (
+    !req.auth &&
+    reqUrl?.pathname !== "/" &&
+    reqUrl?.pathname !== "/protected"
+  ) {
     return NextResponse.redirect(
       new URL(
         `${BASE_PATH}?callbackUrl=${encodeURIComponent(reqUrl?.pathname)}`,

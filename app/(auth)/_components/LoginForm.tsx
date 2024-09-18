@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { doCredentialLogin, doSocialLogin } from "../action";
 import { Checkbox } from "@/components/ui/checkbox";
+import MagicLinkForm from "./MagicLinkForm";
 
 const FormSchema = z.object({
   email: z
@@ -119,6 +120,8 @@ export default function LoginForm() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
+      <div>or</div>
+      <MagicLinkForm />
     </div>
   );
 }

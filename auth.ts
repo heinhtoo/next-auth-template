@@ -6,6 +6,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import { PrismaClient } from "@prisma/client";
+import { sendVerificationRequest } from "./lib/send";
 
 export const BASE_PATH =
   process.env.NODE_ENV === "development"
@@ -16,7 +17,6 @@ type Adapter = typeof PrismaAdapter;
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const customAdapter: Adapter = (p: PrismaClient) => {
   return {
     ...PrismaAdapter(p),
@@ -33,7 +33,7 @@ const customAdapter: Adapter = (p: PrismaClient) => {
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: customAdapter(prisma),
   providers: [
     GoogleProvider({
       authorization: {
@@ -45,14 +45,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       clientId: process.env.AUTH_GOOGLE_ID ?? "",
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
+      allowDangerousEmailAccountLinking: true,
     }),
     GitHubProvider({
       clientId: process.env.AUTH_GITHUB_ID ?? "",
       clientSecret: process.env.AUTH_GITHUB_SECRET ?? "",
+      allowDangerousEmailAccountLinking: true,
     }),
     LinkedInProvider({
       clientId: process.env.AUTH_LINKEDIN_ID ?? "",
       clientSecret: process.env.AUTH_LINKEDIN_SECRET ?? "",
+      allowDangerousEmailAccountLinking: true,
     }),
     CredentialsProvider({
       credentials: {
@@ -68,6 +71,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return dbUser;
       },
     }),
+    {
+      from: process.env.AUTH_MAIL_FROM ?? "",
+      options: {},
+      id: "http-email",
+      name: "Email",
+      type: "email",
+      maxAge: 60 * 60 * 24, // Email link will expire in 24 hours
+      sendVerificationRequest,
+    },
   ],
   session: {
     strategy: "jwt",

@@ -7,11 +7,18 @@ export async function doSocialLogin({
 }: {
   socialMethod: string;
 }) {
-  await signIn(socialMethod.toLowerCase(), { redirectTo: "/home" });
+  await signIn(socialMethod.toLowerCase(), { redirectTo: "/" });
 }
 
 export async function doLogout() {
   await signOut({ redirectTo: "/" });
+}
+
+export async function doMagicLink(email: string) {
+  await signIn("http-email", {
+    email,
+    redirectTo: "/",
+  });
 }
 
 export async function doCredentialLogin({
