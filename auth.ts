@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import { PrismaClient } from "@prisma/client";
@@ -11,7 +10,7 @@ import { sendVerificationRequest } from "./lib/send";
 export const BASE_PATH =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000/"
-    : "https://next-auth-template-lovat.vercel.app/";
+    : process.env.VERCEL_PROJECT_PRODUCTION_URL;
 
 type Adapter = typeof PrismaAdapter;
 
@@ -35,18 +34,6 @@ const customAdapter: Adapter = (p: PrismaClient) => {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: customAdapter(prisma),
   providers: [
-    GoogleProvider({
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-      clientId: process.env.AUTH_GOOGLE_ID ?? "",
-      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
-      allowDangerousEmailAccountLinking: true,
-    }),
     GitHubProvider({
       clientId: process.env.AUTH_GITHUB_ID ?? "",
       clientSecret: process.env.AUTH_GITHUB_SECRET ?? "",

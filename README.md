@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Authentication Template
+
+This project is a template for authentication using [Auth.js](https://authjs.dev/) in a [Next.js](https://nextjs.org/) application, with [Supabase](https://supabase.com/) as the backend database and [Prisma](https://www.prisma.io/) as the ORM.
+
+## Features
+
+- Authentication using NextAuth.js
+- Supabase integration for database and storage
+- Prisma as the database ORM
+- Protected routes and user session management
+- Easy deployment on platforms like Vercel
+
+## Requirements
+
+- Node.js (v14 or later)
+- Supabase
+- Prisma
+- PostgresSQL (for local testing)
 
 ## Getting Started
 
-First, run the development server:
+### 1. Set up Supabase
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+In this project, supabase is used as database for users handling.
+
+- Login to your supbase dashboard
+- Create a new project
+- Click connect button and copy the environment variables.
+- https://dev.to/heinhtoo/implementing-authjs-v5-with-prisma-and-supabase-in-nextjs-lie
+
+### 2. Clone the Repository
+
+```
+git clone https://github.com/heinhtoo/next-auth-template.git
+cd next-auth-template
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Install Dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Before running the app, make sure to install the necessary packages:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+npm install
+```
 
-## Learn More
+### 4. Set Up Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+Create a .env file in project root with the following content:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+# Database URL from supabase or local postgresSQL database
+# https://dev.to/heinhtoo/implementing-authjs-v5-with-prisma-and-supabase-in-nextjs-lie
+DATABASE_URL=
+DIRECT_URL=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+NEXTAUTH_URL="http://localhost:3000"
+# Added by `npx auth`. Read more: https://cli.authjs.dev
+AUTH_SECRET=
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# GitHub Provider
+# https://dev.to/heinhtoo/integrating-github-authentication-with-nextauthjs-a-step-by-step-guide-1fo4
+AUTH_GITHUB_ID=
+AUTH_GITHUB_SECRET=
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# LinkedIn Provider
+# https://dev.to/heinhtoo/integrating-linkedin-authentication-with-nextauthjs-a-step-by-step-guide-4dmg
+AUTH_LINKEDIN_ID=
+AUTH_LINKEDIN_SECRET=
+
+# Magic Link Provider
+AUTH_MAIL_FROM=
+AUTH_MAIL_PWD=
+AUTH_MAIL_HOST=
+AUTH_MAIL_PORT=
+```
+
+### 5. Migrate the database
+
+Since the prisma is already initialize and setup, you need to run this command to apply the schema to your supabase.
+
+```
+npx prisma migrate dev
+```
+
+### 6. Run the application
+
+You are now ready to run the development server:
+
+```
+npm run dev
+```
+
+### 7. Deploy to Vercel (Optional)
+
+When deploying the app to vercel, you need to overwrite the build command.
+
+```
+prisma generate & next build
+```
+
+After that you need to make sure all the environment variables are added in the vercel too.
+
+---
+
+### Note
+
+This template is designed for using supabase so if you are going to change the environment variables make sure the migrations are also applied in the database.
+
+---
+
+### Additional Resources
+
+- [Implementing auth.js v5 with Prisma and Supabase in Next.js](https://dev.to/heinhtoo/implementing-authjs-v5-with-prisma-and-supabase-in-nextjs-lie)
+- [Integrating LinkedIn Authentication with NextAuth.js: A Step-by-Step Guide](https://dev.to/heinhtoo/integrating-linkedin-authentication-with-nextauthjs-a-step-by-step-guide-4dmg)
+- [Integrating GitHub Authentication with NextAuth.js: A Step-by-Step Guide](https://dev.to/heinhtoo/integrating-github-authentication-with-nextauthjs-a-step-by-step-guide-1fo4)
